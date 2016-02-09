@@ -58,6 +58,8 @@
         NSLog(@"Selected %@", self.colors[row]);
         self.colorLabel.text = self.colors[row];
     }
+    
+    [comboBox closeAnimated:YES];
 }
 
 @end

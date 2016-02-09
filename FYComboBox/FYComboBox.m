@@ -3,7 +3,6 @@
 @interface FYComboBox ()
 
 @property (nonatomic, strong) UIButton *button;
-@property (nonatomic, strong) UITableView *tableView;
 
 @end
 
@@ -42,7 +41,7 @@
     
     [self addSubview:self.button];
     
-    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, CGRectGetHeight(self.button.frame), CGRectGetWidth(self.frame), 0) style:UITableViewStylePlain];
+    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, CGRectGetHeight(self.frame), CGRectGetWidth(self.frame), 0) style:UITableViewStylePlain];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.backgroundColor = [UIColor clearColor];
@@ -60,15 +59,11 @@
     self.cellBackgroundColor = [UIColor whiteColor];
     self.cellTextColor = [UIColor blackColor];
     self.cellLineColor = [UIColor clearColor];
+    self.comboBackgroundColor = [UIColor clearColor];
     self.minimumWidth = CGFLOAT_MAX;
     self.showsScrollIndicator = YES;
     self.animationShowDuration = .25;
     self.animationHideDuration = .25;
-}
-
-- (void)layoutSubviews
-{
-    
 }
 
 - (CGFloat)heightWithMaxRows:(NSInteger)maxRows
@@ -88,6 +83,73 @@
     return total;
 }
 
+- (void)openAnimated:(BOOL)animated
+{
+    if (self.state == FYComboBoxStateClosed) {
+        [self.tableView reloadData];
+        
+        if ([self.delegate comboBoxNumberOfRows:self] > 0) {
+            [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
+        }
+    }
+    
+    CGRect buttonFrame = self.button.frame;
+    CGRect tableFrame = CGRectMake(0, CGRectGetHeight(buttonFrame), CGRectGetWidth(self.frame), CGRectGetHeight(self.tableView.frame));
+    
+    UIView *toView = self.comboToView != nil ? self.comboToView : self;
+    
+    if (self.tableView.superview != toView) {
+        [toView addSubview:self.tableView];
+    }
+    
+    tableFrame = [self convertRect:tableFrame toView:toView];
+    
+    self.tableView.frame = tableFrame;
+    
+    CGFloat height = [self heightWithMaxRows:self.maxRows];
+    tableFrame.size.height = height;
+    tableFrame.size.width = self.minimumWidth != CGFLOAT_MAX ? MAX(self.minimumWidth, CGRectGetWidth(buttonFrame)) : CGRectGetWidth(buttonFrame);
+    
+    CGRect newFrame = self.frame;
+    
+    if (toView == self) {
+        newFrame.size.height = CGRectGetHeight(buttonFrame) + height;
+    }
+    
+    void(^openBlock)() = ^{
+        self.frame = newFrame;
+        self.tableView.frame = tableFrame;
+    };
+    
+    if (animated) {
+        [UIView animateWithDuration:self.animationShowDuration animations:openBlock completion:^(BOOL finished) {
+        }];
+    } else {
+        openBlock();
+    }
+}
+
+- (void)closeAnimated:(BOOL)animated
+{
+    CGRect tableFrame = self.tableView.frame;
+    tableFrame.size.height = 0;
+    
+    CGRect newFrame = self.frame;
+    newFrame.size.height = CGRectGetHeight(self.button.frame);
+    
+    void(^closeBlock)() = ^{
+        self.frame = newFrame;
+        self.tableView.frame = tableFrame;
+    };
+    
+    if (animated) {
+        [UIView animateWithDuration:self.animationHideDuration animations:closeBlock completion:^(BOOL finished) {
+        }];
+    } else {
+        closeBlock();
+    }
+}
+
 #pragma mark - Interface Builder
 
 - (void)prepareForInterfaceBuilder
@@ -98,43 +160,16 @@
 
 - (void)comboTouch:(id)sender
 {
-    if (self.tableView.frame.size.height == 0) {
-        
-        [self.tableView reloadData];
-        
-        if ([self.delegate comboBoxNumberOfRows:self] > 0) {
-            [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
+    switch (self.state) {
+        case FYComboBoxStateOpened: {
+            [self closeAnimated:YES];
         }
-        
-        CGFloat height = [self heightWithMaxRows:self.maxRows];
-        
-        CGRect buttonFrame = self.button.frame;
-        
-        CGRect tableFrame = self.tableView.frame;
-        tableFrame.size.height = height;
-        tableFrame.size.width = self.minimumWidth != CGFLOAT_MAX ? MAX(self.minimumWidth, CGRectGetWidth(buttonFrame)) : CGRectGetWidth(buttonFrame);
-        
-        CGRect newFrame = self.frame;
-        newFrame.size.height = self.button.frame.size.height + height;
-        
-        [UIView animateWithDuration:self.animationShowDuration animations:^{
-            self.tableView.frame = tableFrame;
-            self.frame = newFrame;
-        } completion:^(BOOL finished) {
-        }];
-        
-    } else {
-        CGRect tableFrame = self.tableView.frame;
-        tableFrame.size.height = 0;
-        
-        CGRect newFrame = self.frame;
-        newFrame.size.height = self.button.frame.size.height;
-        
-        [UIView animateWithDuration:self.animationHideDuration animations:^{
-            self.tableView.frame = tableFrame;
-            self.frame = newFrame;
-        } completion:^(BOOL finished) {
-        }];
+            break;
+            
+        case FYComboBoxStateClosed: {
+            [self openAnimated:YES];
+        }
+            break;
     }
 }
 
@@ -148,7 +183,9 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    tableView.backgroundColor = self.comboBackgroundColor;
     tableView.showsVerticalScrollIndicator = self.showsScrollIndicator;
+    tableView.rowHeight = self.cellHeight;
     
     return [self.delegate comboBoxNumberOfRows:self];
 }
@@ -197,8 +234,6 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [self comboTouch:tableView];
-    
     if (self.delegate && [self.delegate respondsToSelector:@selector(comboBox:didSelectRow:)]) {
         [self.delegate comboBox:self didSelectRow:indexPath.row];
     }
@@ -219,16 +254,26 @@
 
 #pragma mark - Setters
 
-- (void)setCellHeight:(CGFloat)cellHeight
+- (void)setState:(FYComboBoxState)state animated:(BOOL)animated
 {
-    _cellHeight = cellHeight;
-    
-    self.tableView.rowHeight = _cellHeight;
+    switch (state) {
+        case FYComboBoxStateOpened: {
+            [self openAnimated:animated];
+        }
+            break;
+            
+        case FYComboBoxStateClosed: {
+            [self closeAnimated:animated];
+        }
+            break;
+    }
 }
 
-- (void)setShowsScrollIndicator:(BOOL)showsScrollIndicator
+#pragma mark - Getters
+
+- (FYComboBoxState)state
 {
-    _showsScrollIndicator = showsScrollIndicator;
+    return CGRectGetHeight(self.tableView.frame) == 0.f ? FYComboBoxStateClosed : FYComboBoxStateOpened;
 }
 
 @end
