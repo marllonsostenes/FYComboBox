@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
   s.name = 'FYComboBox'
   s.summary = 'A flexible and easy to use ComboBox for iOS'
-  s.version = '1.1.0'
+  s.version = '0.0.0'
   s.license = 'MIT'
   s.authors = { 'Felipe Augusto' => '' }
   s.homepage = 'https://github.com/felipowsky/FYComboBox'
