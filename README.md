@@ -5,7 +5,7 @@
 FYComboBox is a flexible and easy to use ComboBox.
 You can configure the look and feel on Interface Builder.
 
-<img src="https://raw.githubusercontent.com/felipowsky/FYComboBox/develop/Extras/example.gif" width="400">
+<img src="https://raw.githubusercontent.com/felipowsky/FYComboBox/master/Extras/example.gif" width="400">
 
 ## Installation
 
@@ -16,13 +16,13 @@ You can configure the look and feel on Interface Builder.
 
 ## Usage
 
-**Important**: in order to make `FYComboBox` really flexible the control doesn't implement any extra component automatically like a `UILabel` or `UIImageView`. Instead you use the delegate methods to handle the changes on your interface programmatically. See the [example project](http://github.com/felipowsky/FYComboBox/tree/develop/FYComboBoxExample) for references.
+**Important**: in order to make `FYComboBox` really flexible the control doesn't implement any extra component automatically like a `UILabel` or `UIImageView`. Instead you use the delegate methods to handle the changes on your interface programmatically. See the [example project](http://github.com/felipowsky/FYComboBox/tree/master/FYComboBoxExample) for references.
 
 ### Interface Builder
 
 Select a View an change its class to `FYComboBox` in the identity inspector.
 
-<img src="https://raw.githubusercontent.com/felipowsky/FYComboBox/develop/Extras/interfacebuilder_configuration.png">
+<img src="https://raw.githubusercontent.com/felipowsky/FYComboBox/master/Extras/interfacebuilder_configuration.png">
 
 You can also configure other aspects of the ComboBox in the attributes inspector.
 
