@@ -13,10 +13,10 @@
 
 @end
 
-typedef enum {
+typedef NS_ENUM(NSInteger, FYComboBoxState) {
     FYComboBoxStateOpened,
     FYComboBoxStateClosed,
-} FYComboBoxState;
+};
 
 IB_DESIGNABLE
 @interface FYComboBox : UIView <UITableViewDataSource, UITableViewDelegate>
