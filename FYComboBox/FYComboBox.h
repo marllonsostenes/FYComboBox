@@ -25,6 +25,7 @@ IB_DESIGNABLE
 @property (nonatomic, assign) IBInspectable CGFloat cellHeight;
 @property (nonatomic, strong) IBInspectable UIColor *cellBackgroundColor;
 @property (nonatomic, strong) IBInspectable UIColor *cellTextColor;
+@property (nonatomic, strong) IBInspectable UIFont *cellTextFont;
 @property (nonatomic, strong) IBInspectable UIColor *cellLineColor;
 @property (nonatomic, strong) IBInspectable UIColor *comboBackgroundColor;
 @property (nonatomic, assign) IBInspectable CGFloat minimumWidth;
@@ -35,7 +36,6 @@ IB_DESIGNABLE
 @property (nonatomic, weak) IBOutlet UIView *comboToView;
 @property (nonatomic, weak) IBOutlet id<FYComboBoxDelegate> delegate;
 
-@property (nonatomic, strong, readonly) UITableView *tableView;
 @property (nonatomic, assign, readonly) FYComboBoxState state;
 
 - (void)openAnimated:(BOOL)animated;

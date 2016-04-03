@@ -2,11 +2,14 @@
 
 @interface FYComboBox ()
 
+@property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) UIButton *button;
 
 @end
 
 @implementation FYComboBox
+
+static NSString *cellIdentifier = @"FYComboBoxCellIdentifier";
 
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
@@ -33,7 +36,6 @@
 - (void)setup
 {
     self.button = [UIButton buttonWithType:UIButtonTypeCustom];
-    
     self.button.frame = CGRectMake(0, 0, CGRectGetWidth(self.frame), CGRectGetHeight(self.frame));
     self.button.backgroundColor = [UIColor clearColor];
     [self.button setTitle:@"" forState:UIControlStateNormal];
@@ -41,7 +43,7 @@
     
     [self addSubview:self.button];
     
-    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, CGRectGetHeight(self.frame), CGRectGetWidth(self.frame), 0) style:UITableViewStylePlain];
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, CGRectGetHeight(self.frame), CGRectGetWidth(self.frame), 0) style:UITableViewStylePlain];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.backgroundColor = [UIColor clearColor];
@@ -58,6 +60,7 @@
     self.cellHeight = 50.f;
     self.cellBackgroundColor = [UIColor whiteColor];
     self.cellTextColor = [UIColor blackColor];
+    self.cellTextFont = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier].textLabel.font;
     self.cellLineColor = [UIColor clearColor];
     self.comboBackgroundColor = [UIColor clearColor];
     self.minimumWidth = CGFLOAT_MAX;
@@ -226,6 +229,7 @@
     
     cell.contentView.backgroundColor = self.cellBackgroundColor;
     cell.textLabel.textColor = self.cellTextColor;
+    cell.textLabel.font = self.cellTextFont;
     
     cell.textLabel.text = [self.delegate comboBox:self titleForRow:indexPath.row];
     

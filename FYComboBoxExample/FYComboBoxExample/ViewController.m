@@ -16,6 +16,7 @@
     self.languages = @[@"Objective-C", @"Swift", @"Python", @"C++", @"C"];
     self.colors = @[@"Red", @"Orange", @"Green", @"Blue", @"Yellow", @"Black", @"White", @"Gray"];
     
+    self.colorsComboBox.cellTextFont = [UIFont boldSystemFontOfSize:14];
     self.colorsComboBox.layer.borderWidth = 1.f;
     self.colorsComboBox.layer.borderColor = [UIColor blackColor].CGColor;
     self.colorsComboBox.layer.cornerRadius = 15.f;
