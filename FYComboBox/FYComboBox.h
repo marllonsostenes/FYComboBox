@@ -8,6 +8,10 @@
 - (NSString *)comboBox:(FYComboBox *)comboBox titleForRow:(NSInteger)row;
 
 @optional
+- (void)comboBox:(FYComboBox *)comboBox willOpenAnimated:(BOOL)animated;
+- (void)comboBox:(FYComboBox *)comboBox didOpenAnimated:(BOOL)animated;
+- (void)comboBox:(FYComboBox *)comboBox willCloseAnimated:(BOOL)animated;
+- (void)comboBox:(FYComboBox *)comboBox didCloseAnimated:(BOOL)animated;
 - (void)comboBox:(FYComboBox *)comboBox didSelectRow:(NSInteger)row;
 - (CGFloat)comboBox:(FYComboBox *)comboBox heightForRow:(NSInteger)row;
 
