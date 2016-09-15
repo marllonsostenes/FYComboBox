@@ -96,6 +96,10 @@ static NSString *cellIdentifier = @"FYComboBoxCellIdentifier";
         }
     }
     
+    if (self.delegate && [self.delegate respondsToSelector:@selector(comboBox:willOpenAnimated:)]) {
+        [self.delegate comboBox:self willOpenAnimated:animated];
+    }
+    
     CGRect buttonFrame = self.button.frame;
     CGRect tableFrame = CGRectMake(0, CGRectGetHeight(buttonFrame), CGRectGetWidth(self.frame), CGRectGetHeight(self.tableView.frame));
     
@@ -124,16 +128,28 @@ static NSString *cellIdentifier = @"FYComboBoxCellIdentifier";
         self.tableView.frame = tableFrame;
     };
     
+    void(^completion)() = ^{
+        if (self.delegate && [self.delegate respondsToSelector:@selector(comboBox:didOpenAnimated:)]) {
+            [self.delegate comboBox:self didOpenAnimated:animated];
+        }
+    };
+    
     if (animated) {
         [UIView animateWithDuration:self.animationShowDuration animations:openBlock completion:^(BOOL finished) {
+            completion();
         }];
     } else {
         openBlock();
+        completion();
     }
 }
 
 - (void)closeAnimated:(BOOL)animated
 {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(comboBox:willCloseAnimated:)]) {
+        [self.delegate comboBox:self willCloseAnimated:animated];
+    }
+    
     CGRect tableFrame = self.tableView.frame;
     tableFrame.size.height = 0;
     
@@ -145,11 +161,19 @@ static NSString *cellIdentifier = @"FYComboBoxCellIdentifier";
         self.tableView.frame = tableFrame;
     };
     
+    void(^completion)() = ^{
+        if (self.delegate && [self.delegate respondsToSelector:@selector(comboBox:didCloseAnimated:)]) {
+            [self.delegate comboBox:self didCloseAnimated:animated];
+        }
+    };
+    
     if (animated) {
         [UIView animateWithDuration:self.animationHideDuration animations:closeBlock completion:^(BOOL finished) {
+            completion();
         }];
     } else {
         closeBlock();
+        completion();
     }
 }
 

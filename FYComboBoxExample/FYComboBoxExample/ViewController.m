@@ -63,4 +63,24 @@
     [comboBox closeAnimated:YES];
 }
 
+- (void)comboBox:(FYComboBox *)comboBox willOpenAnimated:(BOOL)animated
+{
+    NSLog(@"willOpen");
+}
+
+- (void)comboBox:(FYComboBox *)comboBox didOpenAnimated:(BOOL)animated
+{
+    NSLog(@"didOpen");
+}
+
+- (void)comboBox:(FYComboBox *)comboBox willCloseAnimated:(BOOL)animated
+{
+    NSLog(@"willClose");
+}
+
+- (void)comboBox:(FYComboBox *)comboBox didCloseAnimated:(BOOL)animated
+{
+    NSLog(@"didClose");
+}
+
 @end
