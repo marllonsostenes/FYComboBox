@@ -254,8 +254,8 @@ static NSString *cellIdentifier = @"FYComboBoxCellIdentifier";
     cell.contentView.backgroundColor = self.cellBackgroundColor;
     cell.textLabel.textColor = self.cellTextColor;
     cell.textLabel.font = self.cellTextFont;
-    cell.imageView.image = self.img;
     cell.textLabel.text = [self.delegate comboBox:self titleForRow:indexPath.row];
+    cell.imageView.image = self.img;
     
     return cell;
 }
