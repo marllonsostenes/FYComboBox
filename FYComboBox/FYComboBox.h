@@ -33,6 +33,7 @@ IB_DESIGNABLE
 @property (nonatomic, strong) IBInspectable UIColor *cellLineColor;
 @property (nonatomic, strong) IBInspectable UIColor *comboBackgroundColor;
 @property (nonatomic, assign) IBInspectable CGFloat minimumWidth;
+@property UIImage* img;
 @property (nonatomic, assign) IBInspectable BOOL showsScrollIndicator;
 @property (nonatomic, assign) IBInspectable double animationShowDuration;
 @property (nonatomic, assign) IBInspectable double animationHideDuration;

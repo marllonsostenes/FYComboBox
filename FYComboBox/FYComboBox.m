@@ -60,7 +60,7 @@ static NSString *cellIdentifier = @"FYComboBoxCellIdentifier";
     self.cellHeight = 50.f;
     self.cellBackgroundColor = [UIColor whiteColor];
     self.cellTextColor = [UIColor blackColor];
-    self.cellTextFont = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier].textLabel.font;
+    self.cellTextFont = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier].textLabel.font;
     self.cellLineColor = [UIColor clearColor];
     self.comboBackgroundColor = [UIColor clearColor];
     self.minimumWidth = CGFLOAT_MAX;
@@ -226,7 +226,7 @@ static NSString *cellIdentifier = @"FYComboBoxCellIdentifier";
     NSInteger lineTag = 100;
     
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
         
         cell.backgroundColor = [UIColor clearColor];
         cell.backgroundView.backgroundColor = [UIColor clearColor];
@@ -254,7 +254,7 @@ static NSString *cellIdentifier = @"FYComboBoxCellIdentifier";
     cell.contentView.backgroundColor = self.cellBackgroundColor;
     cell.textLabel.textColor = self.cellTextColor;
     cell.textLabel.font = self.cellTextFont;
-    
+    cell.imageView.image = self.img;
     cell.textLabel.text = [self.delegate comboBox:self titleForRow:indexPath.row];
     
     return cell;
