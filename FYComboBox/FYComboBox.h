@@ -22,7 +22,6 @@ typedef NS_ENUM(NSInteger, FYComboBoxState) {
     FYComboBoxStateClosed,
 };
 
-IB_DESIGNABLE
 @interface FYComboBox : UIView <UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic, assign) IBInspectable NSInteger maxRows;
